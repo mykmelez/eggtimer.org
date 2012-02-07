@@ -1,5 +1,10 @@
 {
   "name": "Egg Timer",
   "description": "a simple timer",
+  "icons": {
+    "24": "/img/icon-24.png",
+    "48": "/img/icon-48.png",
+    "128": "/img/icon-128.png"
+  },
   "installs_allowed_from": ["*"]
 }
