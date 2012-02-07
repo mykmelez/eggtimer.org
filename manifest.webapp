@@ -1,4 +1,5 @@
 {
   "name": "Egg Timer",
-  "description": "a simple timer"
+  "description": "a simple timer",
+  "installs_allowed_from": ["*"]
 }
