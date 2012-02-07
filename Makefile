@@ -5,4 +5,4 @@ help:
 	@echo '  publish:   publish files on the website'
 
 publish:
-	rsync --archive --verbose --exclude='.git' --exclude='Makefile' ./ melez.com:public_html/eggtimer/
+	rsync --archive --verbose --exclude='.git' --exclude='Makefile' ./ eggtimer.org:public_html/eggtimer/
