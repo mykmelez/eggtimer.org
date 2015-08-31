@@ -1,3 +1,11 @@
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js").then(function(registration) {
+    console.log("Service worker registration successful with scope: " + registration.scope);
+  }).catch(function(error) {
+    console.log("Service worker registration failed with error: " + error);
+  });
+}
+
 // Time values are four-element arrays of single digits representing:
 // element 0: seconds
 // element 1: tens of seconds
