@@ -1,24 +1,36 @@
 var fs = require('fs');
 var readline = require('readline');
 
-var SW_FILE = 'service-worker.js';
-var SW_TEMPLATE_FILE = 'service-worker.tmpl.js';
-var SW_OUTPUT_FILE = 'service-worker.js.out';
+var WORKER_FILE = 'service-worker.js';
+var WORKER_TEMPLATE_FILE = 'service-worker.tmpl.js';
+var WORKER_TEMP_FILE = 'service-worker.js.out';
 
 var rd = readline.createInterface({
-  input: fs.createReadStream(SW_TEMPLATE_FILE),
+  input: fs.createReadStream(WORKER_TEMPLATE_FILE),
   terminal: false,
 });
 
-var out = fs.createWriteStream(SW_OUTPUT_FILE);
+var workerOut = fs.createWriteStream(WORKER_TEMP_FILE);
 
 rd.on('line', function(line) {
   // We should use a proper template processor, but then we'd depend on
   // a third-party module, so for now we're using a simple String.replace
   // on the VERSION key.
   line = line.replace(/\{\{VERSION\}\}/, Date.now());
-  out.write(line + '\n');
+  workerOut.write(line + '\n');
 });
 rd.on('close', function() {
-  fs.renameSync(SW_OUTPUT_FILE, SW_FILE);
+  workerOut.end();
+  fs.renameSync(WORKER_TEMP_FILE, WORKER_FILE);
 });
+
+var MANIFEST_FILE = 'manifest.js';
+var MANIFEST_TEMP_FILE = 'manifest.js.out';
+var manifestOut = fs.createWriteStream(MANIFEST_TEMP_FILE);
+manifestOut.write('var urlsToCache = [\n');
+manifestOut.write('  "index.css",\n');
+manifestOut.write('  "index.html",\n');
+manifestOut.write('  "index.js",\n');
+manifestOut.write('];\n');
+manifestOut.end();
+fs.renameSync(MANIFEST_TEMP_FILE, MANIFEST_FILE);

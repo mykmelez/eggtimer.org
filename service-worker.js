@@ -1,15 +1,10 @@
 // The version of this file, in milliseconds since the epoch.  We update this
 // every time the file is regenerated to ensure the file is byte-different
 // and will trigger an update on the client.
-var VERSION = '1441149526264';
-
+var VERSION = "1441150734610";
 var CACHE_KEY = "cache-" + VERSION;
 
-var urlsToCache = [
-  "index.css",
-  "index.html",
-  "index.js",
-];
+importScripts('manifest.js');
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
