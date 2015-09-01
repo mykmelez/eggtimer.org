@@ -1,7 +1,7 @@
 // The version of this file, in milliseconds since the epoch.  We update this
 // every time the file is regenerated to ensure the file is byte-different
 // and will trigger an update on the client.
-var VERSION = '1441149526264';
+var VERSION = '{{VERSION}}';
 
 var CACHE_KEY = "cache-" + VERSION;
 
