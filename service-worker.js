@@ -1,7 +1,7 @@
 // The version of this file, in milliseconds since the epoch.  We update this
 // every time the file is regenerated to ensure the file is byte-different
 // and will trigger an update on the client.
-var VERSION = "1441226087070";
+var VERSION = "1441228937870";
 var CACHE_KEY = "cache-" + VERSION;
 
 importScripts('manifest.js');

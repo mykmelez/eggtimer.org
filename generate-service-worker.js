@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var readline = require('readline');
 
 var WORKER_FILE = 'service-worker.js';
@@ -28,9 +29,56 @@ var MANIFEST_FILE = 'manifest.js';
 var MANIFEST_TEMP_FILE = 'manifest.js.out';
 var manifestOut = fs.createWriteStream(MANIFEST_TEMP_FILE);
 manifestOut.write('var urlsToCache = [\n');
-manifestOut.write('  "index.css",\n');
-manifestOut.write('  "index.html",\n');
-manifestOut.write('  "index.js",\n');
+
+// Walk the current directory tree and generate a list of file paths relative to
+// the current directory.
+var walk = function(dir, results) {
+  var list = fs.readdirSync(dir);
+  list.forEach(function(file) {
+    file = path.join(dir, file);
+    var stat = fs.lstatSync(file);
+    if (stat && stat.isDirectory()) {
+      walk(file, results);
+    }
+    else {
+      results.push(file);
+    }
+  });
+}
+var files = [];
+walk('./', files);
+
+var include = [
+  new RegExp('.*\.css$'),
+  new RegExp('.*\.html$'),
+  new RegExp('.*\.js$'),
+];
+
+var exclude = [
+  /^\./,
+  /generate-service-worker\.js/,
+  /service-worker\.js/,
+  /service-worker\.tmpl\.js/,
+];
+
+// Write files to the manifest that match the include rules (and aren't excluded
+// by the exclude rules).
+files.forEach(function(file) {
+  for (var i = 0; i < include.length; i++) {
+    if (include[i].test(file)) {
+      for (var j = 0; j < exclude.length; j++) {
+        if (exclude[j].test(file)) {
+          break;
+        }
+      }
+      if (j === exclude.length) {
+        manifestOut.write('  "' + file + '",\n');
+      }
+      break;
+    }
+  }
+});
+
 manifestOut.write('];\n');
 manifestOut.end();
 fs.renameSync(MANIFEST_TEMP_FILE, MANIFEST_FILE);
