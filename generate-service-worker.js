@@ -48,12 +48,14 @@ var walk = function(dir, results) {
 var files = [];
 walk('./', files);
 
+// XXX Move these to an external configuration file.
+// XXX Allow simple wildcards/globs in addition to regexes (for inspiration,
+// see http://wiki.greasespot.net/Include_and_exclude_rules).
 var include = [
   new RegExp('.*\.css$'),
   new RegExp('.*\.html$'),
   new RegExp('.*\.js$'),
 ];
-
 var exclude = [
   /^\./,
   /generate-service-worker\.js/,
@@ -63,6 +65,8 @@ var exclude = [
 
 // Write files to the manifest that match the include rules (and aren't excluded
 // by the exclude rules).
+// XXX Instead of iterating over files, integrate the include/exclude tests
+// into the directory tree walker.
 files.forEach(function(file) {
   for (var i = 0; i < include.length; i++) {
     if (include[i].test(file)) {
